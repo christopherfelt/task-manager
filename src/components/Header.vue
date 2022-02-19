@@ -2,7 +2,7 @@
   <header>
       <h1>{{title}}</h1>
       <Button title="Add Task" color="green" />
-      <Button title="Update Task" color="blue" /> testing
+      <Button title="Update Task" color="blue" />
   </header>
 </template>
 
