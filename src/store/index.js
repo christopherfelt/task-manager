@@ -9,6 +9,19 @@ export default createStore({
   mutations: {
     setAllTasks(state, tasks){
       state.tasks = tasks
+    },
+    addNewTask(state, task){
+      state.tasks.push(task);
+    },
+    updateTask(state, task){
+      state.tasks = state.tasks.map((t) => {
+        return t.id === task.id ? task : t
+      })
+    },
+    deleteTask(state, taskid){
+      state.tasks = state.tasks.filter((t) => {
+        return t.id !== taskid;
+      })
     }
   },
   actions: {
@@ -36,6 +49,36 @@ export default createStore({
         commit('addNewTask', data);
       } catch (error) {
         console.error("Error in createTask action: ", error);
+      }
+    },
+    async editTask({commit}, taskDetails){
+      try {
+        const res = await fetch("http://localhost:5000/tasks/"+taskDetails.id, {
+          method: 'PUT',
+          headers:{
+            'Content-Type':'application/json'
+          },
+          body: JSON.stringify(taskDetails)
+        });
+        const data = await res.json()
+        console.log(data);
+        commit('updateTask', data)
+      } catch (error) {
+        console.error("Error in editTask action");
+      }
+    },
+    async deleteTask({commit}, taskid){
+      try {
+        const res = await fetch("http://localhost:5000/tasks/"+taskid,{
+          method: 'DELETE',
+          headers:{
+            'Content-Type':'application/json'
+          },
+        })
+        console.log(res);
+        commit('deleteTask', taskid);
+      } catch (error) {
+        console.error('Error in editTask action')
       }
     }
   },

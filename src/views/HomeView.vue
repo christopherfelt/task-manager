@@ -30,7 +30,6 @@ export default {
   },
   data() {
     return {
-      // tasks: [],
       showAddTask: false,
     };
   },
@@ -42,12 +41,13 @@ export default {
   methods: {
     deleteTask(id) {
       if (confirm("Are you sure?"))
-        this.tasks = this.tasks.filter((task) => task.id !== id);
+        this.$store.dispatch("deleteTask", id);
     },
     toggleReminder(id) {
-      this.tasks = this.tasks.map((task) =>
-        task.id === id ? { ...task, reminder: !task.reminder } : task
-      );
+      let taskDetails = this.tasks.find(task => task.id === id);
+      taskDetails.reminder = !taskDetails.reminder;
+
+      this.$store.dispatch("editTask", taskDetails);
     },
     AddTask(task) {
       this.tasks = [...this.tasks, task];
@@ -55,15 +55,7 @@ export default {
     toggleAddTask(){
       this.showAddTask = !this.showAddTask;
     },
-    // async fetchTasks(){
-    //   const res = await fetch("http://localhost:5000/tasks");
-    //   const data = await res.json()
-    //   return data
-    // }
   },
   
-  // async created() {
-  //   this.tasks = await this.fetchTasks();
-  // },
 };
 </script>
