@@ -1,7 +1,9 @@
 <template>
-  <h3>{{ task.text }}</h3>
+<div @dblclick="$emit('toggle-reminder', task.id)" :class="[task.reminder ? 'reminder' : '', 'task']" >
+  <span><h3>{{ task.text }}</h3></span> 
+  <span @click="onDelete(task.id)" ><h3><strong>X</strong></h3></span>
   <p> {{ task.day }} </p>
-  <p>  </p>
+</div>
 </template>
 
 <script>
@@ -10,10 +12,15 @@ export default {
   props: {
     task: Object,
   },
+  methods: {
+    onDelete(id){
+      this.$emit('delete-task', id);
+    },
+  }
 };
 </script>
 
-<style>
+<style scope>
 .task {
   background: #f4f4f4;
   margin: 5px;
@@ -25,6 +32,10 @@ export default {
   border-left: 5px solid green;
 }
 
-
+.task h3 {
+  display: flex;
+  align-items: left;
+  justify-content: space-between;
+}
 
 </style>
